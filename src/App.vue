@@ -33,14 +33,14 @@
           <p v-if="status">Что проверено?</p>
           <p v-else>В чем ошибка?</p>
           <b-form-checkbox-group
-              v-model="value"
+              v-model="checkIn"
               :options="options"
           >
           </b-form-checkbox-group>
         </b-col>
 
         <b-col md="12">
-          <b-button variant="primary" class="btn-generate" :disabled="!buttonActive">Сгенерировать</b-button>
+          <b-button @click="generateFeedback" variant="primary" class="btn-generate" :disabled="!buttonActive">Сгенерировать</b-button>
         </b-col>
 
       </b-row>
@@ -51,6 +51,9 @@
 <script>
 import Header from './components/Header.vue'
 import Rating from './components/Rating.vue'
+import grades from './dictionary/grades.json'
+import phrases from './dictionary/phrases.json'
+import combinations from './dictionary/combinations.json'
 
 export default {
   name: 'App',
@@ -62,7 +65,7 @@ export default {
       text: '',
       status: 0,
       rating: 4,
-      value: [],
+      checkIn: [],
       options: [
         { text: 'Subject', value: 'subject' },
         { text: 'Makefile', value: 'makefile' },
@@ -72,13 +75,64 @@ export default {
         { text: 'Checklist', value: 'checklist' },
         { text: 'Знание кода', value: 'code' },
         { text: 'Структура файлов', value: 'bad_files' },
-        { text: 'Запрещенная функция', value: 'forbidden_function' }
-      ]
+        { text: 'Запрещенная функция', value: 'forbidden_functions' }
+      ],
+      grades,
+      phrases,
+      combinations
+    }
+  },
+  methods: {
+    generateFeedback () {
+      this.text = this.generateGrade()
+      let combinations = this.status ? this.combinations.completed : this.combinations.failed
+      let checkInText = ''
+      this.checkIn.forEach(function (value) {
+        let checkInPart = ''
+        this.getRandomElement(combinations[value]).forEach(function (combination_part) {
+          checkInPart += `${this.getRandomPhrase(combination_part)} `
+        }, this)
+        checkInText += `${checkInPart.slice(0, -1)}, `
+      }, this)
+      this.text += ` ${this.replaceEndByDot(this.capitalizeFirstLetter(checkInText))}`
+    },
+    generateGrade () {
+      let grades
+      let phrase = []
+      if (this.rating === 5)
+        grades = this.grades['excellent']
+      else if (this.rating === 4)
+        grades = this.grades['good']
+      else
+        grades = this.grades['satisfactory']
+      phrase.push(grades[Math.floor((Math.random() * grades.length))])
+      phrase.push(this.getRandomPhrase('project'))
+      this.shuffleArray(phrase)
+      return `${this.capitalizeFirstLetter(phrase[0])} ${phrase[1]}.`
+    },
+    getRandomPhrase (key) {
+      return this.getRandomElement(this.phrases[key])
+    },
+    getRandomElement (array) {
+      let i = Math.floor((Math.random() * array.length))
+      return array[i]
+    },
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    replaceEndByDot(string) {
+      return string.slice(0, -1).replace(/.$/,".");
+    },
+    shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
     }
   },
   computed: {
     buttonActive () {
-      return this.value.length > 0
+      return this.checkIn.length > 0
     }
   }
 }
