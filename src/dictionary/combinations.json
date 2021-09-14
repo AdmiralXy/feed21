@@ -1,0 +1,42 @@
+{
+  "_comment": "Combinations are made according to the principle: word + phrase",
+  "completed": {
+    "subject": [
+      ["contains_everything_needed", "by_subject"]
+    ],
+    "makefile": [
+      ["makefile", "checked"],
+      ["makefile", "contains_everything_needed"]
+    ],
+    "norminette": [
+      ["norminette", "checked"]
+    ],
+    "leaks": [
+      ["leaks", "not_found_in_program"],
+      ["leaks", "checked"]
+    ],
+    "tests": [
+      ["run_out", "by_tests", "all", "good"]
+    ],
+    "checklist": [
+      ["run_out", "by_checklist", "all", "good"]
+    ],
+    "code": [
+      ["know", "code"],
+      ["code", "well_designed"]
+    ],
+    "bad_files": [
+      ["bad_files", "checked"],
+      ["bad_files", "done_by_subject"]
+    ],
+    "forbidden_functions": [
+      ["forbidden_functions", "not_used_multiple"],
+      ["forbidden_function_accusative", "not_used"]
+    ]
+  },
+  "failed": {
+    "forbidden_functions": [
+      ["forbidden_function", "in_code"]
+    ]
+  }
+}
