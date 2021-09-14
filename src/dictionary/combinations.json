@@ -19,7 +19,8 @@
       ["run_out", "by_tests", "all", "good"]
     ],
     "checklist": [
-      ["run_out", "by_checklist", "all", "good"]
+      ["by_checklist", "all", "good"],
+      ["checklist"]
     ],
     "code": [
       ["know", "code"],
@@ -35,6 +36,30 @@
     ]
   },
   "failed": {
+    "subject": [
+      ["by_subject", "wrong"]
+    ],
+    "makefile": [
+      ["makefile", "failed_by_subject"]
+    ],
+    "norminette": [
+      ["by_norminette", "not_pass"]
+    ],
+    "leaks": [
+      ["found_in_program", "leaks"]
+    ],
+    "tests": [
+      ["run_out", "by_tests", "wrong"]
+    ],
+    "checklist": [
+      ["by_checklist", "wrong"]
+    ],
+    "code": [
+      ["not_know", "code"]
+    ],
+    "bad_files": [
+      ["bad_files", "failed_by_subject"]
+    ],
     "forbidden_functions": [
       ["forbidden_function", "in_code"]
     ]

@@ -8,14 +8,21 @@
 
           <Header />
 
-          <b-form-textarea
-              id="textarea"
-              v-model="text"
-              rows="3"
-              max-rows="6"
-          ></b-form-textarea>
-
-          <pre class="mt-3 mb-0">{{ text }}</pre>
+          <div class="feedback__header">
+            Evaluated by
+            <b><a class="feedback__header__link" href="javascript:void(0);">somebody</a></b>
+            <b>
+              <span>right now</span>
+            </b>
+            <b>
+              <span :class="percents > 86 ? 'text-success' : 'text-danger'">
+                {{ `${percents}` }}%
+              </span>
+            </b>
+          </div>
+          <div class="feedback mt-3 mb-0">
+            <span>{{ text }}</span>
+          </div>
         </b-col>
 
         <b-col md="12" class="py-4">
@@ -62,7 +69,8 @@ export default {
   },
   data () {
     return {
-      text: '',
+      percents: 0,
+      text: '-',
       status: 0,
       rating: 4,
       checkIn: [],
@@ -75,7 +83,9 @@ export default {
         { text: 'Checklist', value: 'checklist' },
         { text: 'Знание кода', value: 'code' },
         { text: 'Структура файлов', value: 'bad_files' },
-        { text: 'Запрещенная функция', value: 'forbidden_functions' }
+        { text: 'Запрещенная функция', value: 'forbidden_functions' },
+        { text: 'Empty Git', value: 'empty_repository' },
+        { text: '-42', value: 'cheating' }
       ],
       grades,
       phrases,
@@ -84,8 +94,9 @@ export default {
   },
   methods: {
     generateFeedback () {
-      this.text = this.generateGrade()
+      this.text = this.status ? this.generateGrade() : ''
       let combinations = this.status ? this.combinations.completed : this.combinations.failed
+      this.shuffleArray(this.checkIn)
       let checkInText = ''
       this.checkIn.forEach(function (value) {
         let checkInPart = ''
@@ -103,8 +114,10 @@ export default {
         grades = this.grades['excellent']
       else if (this.rating === 4)
         grades = this.grades['good']
-      else
+      else if (this.rating === 3)
         grades = this.grades['satisfactory']
+      else
+        grades = this.grades['so-so']
       phrase.push(grades[Math.floor((Math.random() * grades.length))])
       phrase.push(this.getRandomPhrase('project'))
       this.shuffleArray(phrase)
@@ -134,13 +147,40 @@ export default {
     buttonActive () {
       return this.checkIn.length > 0
     }
+  },
+  mounted() {
+    let thisScope = this
+    setInterval(function() {
+      if (thisScope.percents + 1 > 124)
+        thisScope.percents = 0
+      thisScope.percents++
+    }, 40);
   }
 }
 </script>
 
 <style lang="scss">
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
   @import "./assets/scss/app.scss";
+
+  .feedback {
+    font-size: 16px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 3px;
+    margin: 5px 0;
+    text-align: left;
+  }
+
+  .feedback__header {
+    color: #67676d;
+    text-transform: uppercase;
+    font-size: .8em;
+    text-align: left;
+  }
+
+  .feedback__header__link {
+    margin-right: 4px;
+  }
 
   .btn-generate {
     width: 235px;
