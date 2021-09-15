@@ -99,6 +99,10 @@ export default {
         { text: 'Empty Git', value: 'empty_repository' },
         { text: '-42', value: 'cheating' }
       ],
+      completedIgnoreList: [
+        'empty_repository', 'cheating'
+      ],
+      failedIgnoreList: [],
       grades,
       phrases,
       combinations
@@ -111,11 +115,14 @@ export default {
       this.shuffleArray(this.checkIn)
       let checkInText = ''
       this.checkIn.forEach(function (value) {
-        let checkInPart = ''
-        this.getRandomElement(combinations[value]).forEach(function (combination_part) {
-          checkInPart += `${this.getRandomPhrase(combination_part)} `
-        }, this)
-        checkInText += `${checkInPart.slice(0, -1)}, `
+        if (!((this.status && this.completedIgnoreList.indexOf(value) >= 0)
+            || (!this.status && this.failedIgnoreList.indexOf(value) >= 0))) {
+          let checkInPart = ''
+          this.getRandomElement(combinations[value]).forEach(function (combination_part) {
+            checkInPart += `${this.getRandomPhrase(combination_part)} `
+          }, this)
+          checkInText += `${checkInPart.slice(0, -1)}, `
+        }
       }, this)
       this.text += ` ${this.replaceEndByDot(this.capitalizeFirstLetter(checkInText))}`
     },

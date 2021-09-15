@@ -33,6 +33,12 @@
     "forbidden_functions": [
       ["forbidden_functions", "not_used_multiple"],
       ["forbidden_function_accusative", "not_used"]
+    ],
+    "empty_repository": [
+      [""]
+    ],
+    "cheating": [
+      [""]
     ]
   },
   "failed": {
@@ -62,6 +68,12 @@
     ],
     "forbidden_functions": [
       ["forbidden_function", "in_code"]
+    ],
+    "empty_repository": [
+      ["empty_repository"]
+    ],
+    "cheating": [
+      ["cheating"]
     ]
   }
 }
