@@ -6,7 +6,8 @@
     ],
     "makefile": [
       ["makefile", "checked"],
-      ["makefile", "contains_everything_needed"]
+      ["makefile", "contains_everything_needed_rules"],
+      ["makefile", "not_relinked"]
     ],
     "norminette": [
       ["norminette", "checked"]
