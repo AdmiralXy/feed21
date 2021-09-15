@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     setRating (value) {
-      this.value = value
       this.$emit('input', value)
     },
   }
